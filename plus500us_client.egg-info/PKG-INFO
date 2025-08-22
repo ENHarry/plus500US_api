@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: plus500us-client
+Version: 0.2.0
+Summary: Unofficial Plus500US trading client (requests.Session). Adds interactive captcha/browser handoff.
+Author-email: Your Name <you@example.com>
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.31.0
+Requires-Dist: pydantic>=2.5.0
+Requires-Dist: tenacity>=8.2.3
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: PyYAML>=6.0.1
+Requires-Dist: rich>=13.7.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: responses>=0.25.0; extra == "dev"
+Dynamic: license-file
+
+# plus500us-client (Unofficial) — Hybrid Login
+
+**⚠️ Disclaimer**: This is an *unofficial*, demo-oriented client. It must respect Plus500US Terms of Use.
+Do **not** bypass captchas or bot checks. This client offers a *user-interactive* browser handoff to satisfy human verification.
+
+## What’s new
+- `--interactive` login: open the official site in your browser, complete reCAPTCHA, then paste a **Copy as cURL** command or **Cookie** header. The client imports the cookies into its `requests.Session`.
+
+## Quick start
+```bash
+pip install -e .[dev]
+python -m plus500us_client.cli login --interactive
+# or
+python examples/interactive_login.py
+```
+
+## Why a browser handoff?
+- Many platforms require human verification via JS and/or reCAPTCHA. Respecting ToS means we **let you complete it in your browser** and **import** the authenticated session cookies—no automation evasion.

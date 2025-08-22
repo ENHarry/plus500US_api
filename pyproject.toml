@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plus500us-client"
+version = "0.2.0"
+description = "Unofficial Plus500US trading client (requests.Session). Adds interactive captcha/browser handoff."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Your Name", email = "you@example.com"}]
+license = {text = "MIT"}
+dependencies = [
+  "requests>=2.31.0",
+  "pydantic>=2.5.0",
+  "tenacity>=8.2.3",
+  "python-dateutil>=2.8.2",
+  "PyYAML>=6.0.1",
+  "rich>=13.7.0",
+  "selenium>=4.15.0",
+  "webdriver-manager>=4.0.0",
+  "undetected-chromedriver>=3.5.0",
+  "beautifulsoup4>=4.12.0",
+  "lxml>=4.9.0"
+]
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0", "responses>=0.25.0"]
+[tool.setuptools.packages.find]
+where = ["."]
