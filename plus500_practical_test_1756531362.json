@@ -1,0 +1,307 @@
+{
+  "timestamp": "2025-08-30T01:22:37.092947",
+  "global_config": {},
+  "tests": {
+    "server_time": {
+      "status_code": 200,
+      "content_length": 0,
+      "timestamp": "2025-08-30T01:22:37.257701"
+    },
+    "platform_info": {
+      "status_code": 200,
+      "content_length": 0,
+      "content_type": "unknown"
+    },
+    "configuration": {
+      "status_code": 200,
+      "content_length": 0,
+      "content_type": "unknown"
+    },
+    "market_data_basic": {
+      "status_code": 200,
+      "content_length": 0,
+      "headers": {
+        "Date": "Sat, 30 Aug 2025 05:22:38 GMT",
+        "Content-Length": "0",
+        "Connection": "keep-alive",
+        "CF-RAY": "9771d9fa2a602f1d-LAX",
+        "Cache-Control": "private",
+        "x-frame-options": "Deny",
+        "p3p": "CP='p3p'",
+        "Strict-Transport-Security": "max-age=31536000",
+        "cf-cache-status": "DYNAMIC",
+        "expect-ct": "max-age=86400, enforce",
+        "referrer-policy": "origin-when-cross-origin",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "Server": "cloudflare",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      }
+    },
+    "quotes_basic": {
+      "status_code": 200,
+      "content_length": 0,
+      "content_type": "unknown",
+      "note": "Empty response - may indicate no data available for parameters"
+    },
+    "instrument_testing": {
+      "by_instrument_id": {
+        "1": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:38 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771d9fd7d552f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "2": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:38 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771d9ff9f342f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "3": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:39 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da0138e42f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "4": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:39 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da02da262f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "5": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:39 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da046b6f2f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "10": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:39 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da05cc962f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "100": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:40 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da074dd22f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "101": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:40 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da08bf142f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        },
+        "500": {
+          "status_code": 200,
+          "content_length": 0,
+          "headers": {
+            "Date": "Sat, 30 Aug 2025 05:22:40 GMT",
+            "Content-Length": "0",
+            "Connection": "keep-alive",
+            "CF-RAY": "9771da0a48722f1d-LAX",
+            "Cache-Control": "private",
+            "x-frame-options": "Deny",
+            "p3p": "CP='p3p'",
+            "Strict-Transport-Security": "max-age=31536000",
+            "cf-cache-status": "DYNAMIC",
+            "expect-ct": "max-age=86400, enforce",
+            "referrer-policy": "origin-when-cross-origin",
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "Server": "cloudflare",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          }
+        }
+      },
+      "by_symbol": {
+        "SPX": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "ES": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "NQ": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "YM": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "RTY": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "BTC": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "ETH": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "GC": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "CL": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        },
+        "NG": {
+          "status_code": 200,
+          "content_length": 0,
+          "content_type": "unknown",
+          "note": "Empty response - may indicate no data available for parameters"
+        }
+      },
+      "summary": {
+        "total_tested": 19,
+        "responses_with_data": 0
+      }
+    }
+  }
+}

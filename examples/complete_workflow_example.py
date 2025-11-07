@@ -31,7 +31,7 @@ from plus500us_client.webdriver import (
     auth_handler,
 )
 from plus500us_client.hybrid import SessionBridge, FallbackHandler
-from plus500us_client.errors import ValidationError, OrderRejectError
+from plus500us_client.requests.errors import ValidationError, OrderRejectError
 
 class UnifiedScreenshotMonitor:
     """Screenshot monitor using the same Selenium WebDriver"""

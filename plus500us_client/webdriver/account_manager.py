@@ -13,10 +13,10 @@ from .browser_manager import BrowserManager
 from .element_detector import ElementDetector
 from .selectors import Plus500Selectors
 from .utils import WebDriverUtils
-from ..config import Config
-from ..account import AccountClient
-from ..models import Account
-from ..errors import ValidationError, AuthenticationError
+from ..requests.config import Config
+from ..requests.account import AccountClient
+from ..requests.models import Account
+from ..requests.errors import ValidationError, AuthenticationError
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,10 @@ class WebDriverAccountManager:
         Returns:
             'demo' or 'live' based on active account type
         """
+        if not self.element_detector or not self.driver:
+            logger.warning("WebDriver not initialized properly for account type detection")
+            return self.config.account_type
+            
         logger.info("Detecting current account type from WebDriver")
         print("Detecting current account type...")
         try:
@@ -107,6 +111,10 @@ class WebDriverAccountManager:
         Returns:
             True if switch was successful
         """
+        if not self.element_detector or not self.driver:
+            logger.error("WebDriver not initialized properly for account switching")
+            return False
+            
         target_type = target_type.lower()
         if target_type not in ['demo', 'live']:
             raise ValidationError(f"Invalid account type: {target_type}. Must be 'demo' or 'live'")
@@ -309,6 +317,10 @@ class WebDriverAccountManager:
             
             for pattern in text_patterns:
                 try:
+                    if not self.driver:
+                        logger.error("WebDriver not available for element search")
+                        continue
+                        
                     elements = self.driver.find_elements(By.XPATH, pattern)
                     for element in elements:
                         if element.is_displayed() and element.is_enabled():
@@ -326,6 +338,10 @@ class WebDriverAccountManager:
             # Method 2: Try keyboard navigation if available
             try:
                 from selenium.webdriver.common.keys import Keys
+                
+                if not self.driver:
+                    logger.error("WebDriver not available for keyboard navigation")
+                    return False
                 
                 # Try Tab + Enter approach
                 current_element = self.driver.switch_to.active_element
@@ -544,6 +560,14 @@ class WebDriverAccountManager:
         Returns:
             Dictionary containing account balance information
         """
+        if not self.element_detector or not self.driver:
+            logger.error("WebDriver not initialized properly for balance extraction")
+            return {
+                'account_type': self.config.account_type,
+                'timestamp': time.time(),
+                'error': 'WebDriver not initialized'
+            }
+            
         logger.info("Extracting account balance data from WebDriver")
         
         balance_data = {
@@ -595,9 +619,16 @@ class WebDriverAccountManager:
                 logger.debug(f"Extracted full margin available: ${full_margin_value}")
             
             # Calculate margin used (equity - available margin)
-            if 'equity' in balance_data and 'available' in balance_data:
-                margin_used = balance_data['equity'] - balance_data['available']
-                balance_data['margin_used'] = max(Decimal('0'), margin_used)
+            if ('equity' in balance_data and 'available' in balance_data and 
+                balance_data['equity'] is not None and balance_data['available'] is not None):
+                try:
+                    equity = Decimal(str(balance_data['equity']))
+                    available = Decimal(str(balance_data['available']))
+                    margin_used = equity - available
+                    balance_data['margin_used'] = max(Decimal('0'), margin_used)
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Could not calculate margin used: {e}")
+                    balance_data['margin_used'] = Decimal('0')
             
             logger.info(f"Successfully extracted account balance data: {len(balance_data)} fields")
             return balance_data

@@ -1,0 +1,447 @@
+{
+  "timestamp": "2025-08-30T01:21:15.100727",
+  "session_status": {
+    "authenticated": true,
+    "global_config": {},
+    "session_data": {}
+  },
+  "endpoint_tests": {
+    "chart_data": {
+      "status_code": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": 41,
+      "response": {
+        "ResultCode": 2,
+        "ErrorDesc": "Logged out"
+      }
+    },
+    "instruments": {
+      "status_code": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": 41,
+      "response": {
+        "ResultCode": 2,
+        "ErrorDesc": "Logged out"
+      }
+    },
+    "market_data": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "quotes": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "server_time": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "app_info": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "config": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "market_status": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "platform_info": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "trading_hours": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "spread_info": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0
+    },
+    "cookies": {
+      "status_code": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": 44,
+      "response": {
+        "ResultCode": 25,
+        "ErrorDesc": "InvalidInput"
+      }
+    }
+  },
+  "parameter_tests": {
+    "/ClientRequest/GetChartDataImm": {
+      "test_0": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "1"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_1": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "2"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_2": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "3"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_3": {
+        "status_code": 200,
+        "params": {
+          "instrumentId": "1"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_4": {
+        "status_code": 200,
+        "params": {
+          "symbol": "SPX"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_5": {
+        "status_code": 200,
+        "params": {
+          "symbol": "ES"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_6": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1m"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_7": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "5m"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_8": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1h"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_9": {
+        "status_code": 200,
+        "params": {},
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      }
+    },
+    "/ClientRequest/GetTradeInstruments": {
+      "test_0": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "1"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_1": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "2"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_2": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "3"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_3": {
+        "status_code": 200,
+        "params": {
+          "instrumentId": "1"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_4": {
+        "status_code": 200,
+        "params": {
+          "symbol": "SPX"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_5": {
+        "status_code": 200,
+        "params": {
+          "symbol": "ES"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_6": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1m"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_7": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "5m"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_8": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1h"
+        },
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      },
+      "test_9": {
+        "status_code": 200,
+        "params": {},
+        "content_length": 41,
+        "response": {
+          "ResultCode": 2,
+          "ErrorDesc": "Logged out"
+        }
+      }
+    },
+    "/ClientRequest/GetQuotes": {
+      "test_0": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "1"
+        },
+        "content_length": 0
+      },
+      "test_1": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "2"
+        },
+        "content_length": 0
+      },
+      "test_2": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "3"
+        },
+        "content_length": 0
+      },
+      "test_3": {
+        "status_code": 200,
+        "params": {
+          "instrumentId": "1"
+        },
+        "content_length": 0
+      },
+      "test_4": {
+        "status_code": 200,
+        "params": {
+          "symbol": "SPX"
+        },
+        "content_length": 0
+      },
+      "test_5": {
+        "status_code": 200,
+        "params": {
+          "symbol": "ES"
+        },
+        "content_length": 0
+      },
+      "test_6": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1m"
+        },
+        "content_length": 0
+      },
+      "test_7": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "5m"
+        },
+        "content_length": 0
+      },
+      "test_8": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1h"
+        },
+        "content_length": 0
+      },
+      "test_9": {
+        "status_code": 200,
+        "params": {},
+        "content_length": 0
+      }
+    },
+    "/ClientRequest/GetMarketData": {
+      "test_0": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "1"
+        },
+        "content_length": 0
+      },
+      "test_1": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "2"
+        },
+        "content_length": 0
+      },
+      "test_2": {
+        "status_code": 200,
+        "params": {
+          "InstrumentID": "3"
+        },
+        "content_length": 0
+      },
+      "test_3": {
+        "status_code": 200,
+        "params": {
+          "instrumentId": "1"
+        },
+        "content_length": 0
+      },
+      "test_4": {
+        "status_code": 200,
+        "params": {
+          "symbol": "SPX"
+        },
+        "content_length": 0
+      },
+      "test_5": {
+        "status_code": 200,
+        "params": {
+          "symbol": "ES"
+        },
+        "content_length": 0
+      },
+      "test_6": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1m"
+        },
+        "content_length": 0
+      },
+      "test_7": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "5m"
+        },
+        "content_length": 0
+      },
+      "test_8": {
+        "status_code": 200,
+        "params": {
+          "timeframe": "1h"
+        },
+        "content_length": 0
+      },
+      "test_9": {
+        "status_code": 200,
+        "params": {},
+        "content_length": 0
+      }
+    }
+  },
+  "web_app_data": {
+    "ProductManager": "productIntent === ECProductTypeToString(ECProductType.Invest)) || isUrlParameterTrue(\"mw\") || isUrlParameterTrue(\"mwi\")"
+  }
+}

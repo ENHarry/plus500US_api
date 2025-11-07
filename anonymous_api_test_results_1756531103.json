@@ -1,0 +1,125 @@
+{
+  "timestamp": "2025-08-30T01:18:23.828370",
+  "api_endpoints": {
+    "/ClientRequest/GetChartDataImm": {
+      "status_code": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": 41,
+      "response_time": 0.244835,
+      "json_response": {
+        "ResultCode": 2,
+        "ErrorDesc": "Logged out"
+      }
+    },
+    "/ClientRequest/GetTradeInstruments": {
+      "status_code": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": 41,
+      "response_time": 0.223708,
+      "json_response": {
+        "ResultCode": 2,
+        "ErrorDesc": "Logged out"
+      }
+    },
+    "/ClientRequest/GetMarketData": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.21367
+    },
+    "/ClientRequest/GetInstrumentData": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.224443
+    },
+    "/ClientRequest/GetQuotes": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.267527
+    },
+    "/ClientRequest/GetServerTime": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.2164
+    },
+    "/ClientRequest/GetApplicationInfo": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.231397
+    },
+    "/ClientRequest/GetConfiguration": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.2209
+    },
+    "/ClientRequest/GetMarketStatus": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.225218
+    },
+    "/ClientRequest/GetPlatformInfo": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.158543
+    },
+    "/ClientRequest/GetTradingHours": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.211275
+    },
+    "/ClientRequest/GetSpreadInfo": {
+      "status_code": 200,
+      "content_type": "unknown",
+      "content_length": 0,
+      "response_time": 0.155037
+    },
+    "/handle-cookies": {
+      "status_code": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": 44,
+      "response_time": 0.222291,
+      "json_response": {
+        "ResultCode": 25,
+        "ErrorDesc": "InvalidInput"
+      }
+    },
+    "/ping": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 30498,
+      "response_time": 0.251278,
+      "text_preview": "\r\n<!doctype html>\r\n<html class=\"no-js ios-15\" lang=\"en\" dir=\"ltr\">\r\n<head>\r\n    <script nonce=\"oxhoWH3H0M/d+tMClKIbwA==\">\r\n        performance.mark(\"FirstPageLoaded-start\");\r\n        performance.mark("
+    },
+    "/status": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 30498,
+      "response_time": 0.21187,
+      "text_preview": "\r\n<!doctype html>\r\n<html class=\"no-js ios-15\" lang=\"en\" dir=\"ltr\">\r\n<head>\r\n    <script nonce=\"zVQdoTLMpxOhks0ke0fxTQ==\">\r\n        performance.mark(\"FirstPageLoaded-start\");\r\n        performance.mark("
+    },
+    "/health": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 30498,
+      "response_time": 0.239446,
+      "text_preview": "\r\n<!doctype html>\r\n<html class=\"no-js ios-15\" lang=\"en\" dir=\"ltr\">\r\n<head>\r\n    <script nonce=\"CU0hmBP+5uxP3DAg7ckNlQ==\">\r\n        performance.mark(\"FirstPageLoaded-start\");\r\n        performance.mark("
+    }
+  },
+  "web_app_data": {
+    "has_global_config": true,
+    "global_config_found": true,
+    "has_ProductManager": true,
+    "has_applicationType": true,
+    "has_isInTrade": true,
+    "has_ErrorTrackingDns": true,
+    "has_firebaseConfiguration": true
+  }
+}

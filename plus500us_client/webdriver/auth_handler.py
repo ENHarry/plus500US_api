@@ -20,9 +20,10 @@ from .account_manager import WebDriverAccountManager
 from ..config import Config
 from ..errors import AuthenticationError, CaptchaRequiredError
 from ..hybrid import SessionBridge
+from ..security import secure_logger, SecureCredentialHandler
 
 
-logger = logging.getLogger(__name__)
+logger = secure_logger(__name__)
 
 class WebDriverAuthHandler:
     """Handles authentication through WebDriver with manual login and cookie transfer"""
@@ -124,6 +125,10 @@ class WebDriverAuthHandler:
             # Keys
             if em and pa and lg:
                 try:
+                    # Use credential masking for security
+                    masked_email = SecureCredentialHandler.mask_sensitive_data(self.config.email or "")
+                    logger.info(f"Entering credentials for email: {masked_email}")
+                    
                     self.element_detector.safe_send_keys(self.selectors.LOGIN_EMAIL, self.config.email)
                     self.element_detector.safe_send_keys(self.selectors.LOGIN_PASSWORD, self.config.password)
                     self.element_detector.safe_click(self.selectors.KEEP_ME_LOGGED_IN)  
@@ -151,7 +156,7 @@ class WebDriverAuthHandler:
                     # Check if logged in
                     if self._is_already_logged_in():
                         session_data = self._extract_session_data()
-                        print("✅ Automatic login successful")
+                        logger.info("✅ Automatic login successful")
                         return session_data
                     else:
                         logger.warning("Login completed but dashboard not detected")
@@ -217,6 +222,24 @@ class WebDriverAuthHandler:
             logger.error(f"Manual login flow failed: {e}")
             self._take_debug_screenshot("login_error")
             raise AuthenticationError(f"Login failed: {e}")
+    
+    def get_current_session_data(self) -> Dict[str, Any]:
+        """
+        Get current session data from active WebDriver instance
+        
+        Returns:
+            Dictionary containing current session data and cookies
+        """
+        if not self.driver:
+            raise AuthenticationError("No active WebDriver session")
+        
+        try:
+            # Extract current session data
+            return self._extract_session_data()
+            
+        except Exception as e:
+            logger.error(f"Failed to get current session data: {e}")
+            raise AuthenticationError(f"Session data extraction failed: {e}")
         
     def quick_cookie_import(self, stay_open: bool = True) -> Dict[str, Any]:
         """

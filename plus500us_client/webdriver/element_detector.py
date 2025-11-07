@@ -25,9 +25,22 @@ class ElementDetector:
         self._successful_selectors = {}
         self._selector_stats = {}
         
+    def _update_selector_stats(self, selector_type: str, selector: str, success: bool) -> None:
+        """Update statistics for selector performance tracking"""
+        if selector_type not in self._selector_stats:
+            self._selector_stats[selector_type] = {}
+        if selector not in self._selector_stats[selector_type]:
+            self._selector_stats[selector_type][selector] = {'success': 0, 'total': 0}
+        
+        stats = self._selector_stats[selector_type][selector]
+        stats['total'] += 1
+        if success:
+            stats['success'] += 1
+        
     def find_element_robust(self, selector_dict: Dict[str, List[str]], 
                            timeout: Optional[int] = None, 
-                           wait_for_clickable: bool = False) -> Optional[WebElement]:
+                           wait_for_clickable: bool = False,
+                           first_match_only: bool = True) -> Optional[WebElement]:
         """
         Try multiple selector strategies with comprehensive fallbacks
         
@@ -35,6 +48,7 @@ class ElementDetector:
             selector_dict: Dictionary with 'xpath' and 'css' keys containing selector lists
             timeout: Wait timeout (uses default if None)
             wait_for_clickable: Wait for element to be clickable instead of just present
+            first_match_only: Exit at first successful match for efficiency
             
         Returns:
             WebElement if found, None otherwise
@@ -42,14 +56,14 @@ class ElementDetector:
         timeout = timeout or self.default_timeout
         
         # Strategy 1: Try all XPath selectors first (most reliable)
-        element = self._try_xpath_selectors(selector_dict.get('xpath', []), timeout, wait_for_clickable)
+        element = self._try_xpath_selectors(selector_dict.get('xpath', []), timeout, wait_for_clickable, first_match_only)
         if element:
             logger.debug(f"Found element using XPath selector")
             print(f"Found element using XPath selector: {element}")
             return element
             
         # Strategy 2: Try all CSS selectors
-        element = self._try_css_selectors(selector_dict.get('css', []), timeout//2, wait_for_clickable)
+        element = self._try_css_selectors(selector_dict.get('css', []), timeout//2, wait_for_clickable, first_match_only)
         if element:
             logger.debug(f"Found element using CSS selector")
             print(f"Found element using CSS selector: {element}")
@@ -244,51 +258,109 @@ class ElementDetector:
             return ""
     
     def _try_xpath_selectors(self, xpaths: List[str], timeout: int, 
-                            wait_for_clickable: bool = False) -> Optional[WebElement]:
-        """Try all XPath selectors in order"""
-        for xpath in xpaths:
+                            wait_for_clickable: bool = False, first_match_only: bool = True) -> Optional[WebElement]:
+        """
+        Try all XPath selectors in order with optimization for first match
+        
+        Args:
+            xpaths: List of XPath selectors to try
+            timeout: Total timeout for all selectors
+            wait_for_clickable: Wait for element to be clickable instead of just present
+            first_match_only: Exit immediately on first successful match
+            
+        Returns:
+            WebElement if found, None otherwise
+        """
+        if first_match_only and self._successful_selectors.get('xpath'):
+            # Try the previously successful selector first
+            successful_xpath = self._successful_selectors['xpath']
+            if successful_xpath in xpaths:
+                xpaths = [successful_xpath] + [x for x in xpaths if x != successful_xpath]
+        
+        for i, xpath in enumerate(xpaths):
+            # Calculate timeout per selector based on position and strategy
+            if first_match_only:
+                # Give more time to first few selectors
+                selector_timeout = max(1, timeout // (i + 1))
+            else:
+                selector_timeout = timeout // len(xpaths)
+                
             try:
                 if wait_for_clickable:
-                    element = WebDriverWait(self.driver, timeout//len(xpaths)).until(
+                    element = WebDriverWait(self.driver, selector_timeout).until(
                         EC.element_to_be_clickable((By.XPATH, xpath))
                     )
                 else:
-                    element = WebDriverWait(self.driver, timeout//len(xpaths)).until(
+                    element = WebDriverWait(self.driver, selector_timeout).until(
                         EC.presence_of_element_located((By.XPATH, xpath))
                     )
                 
                 if element and element.is_displayed():
+                    # Cache successful selector for future optimization
+                    self._successful_selectors['xpath'] = xpath
+                    self._update_selector_stats('xpath', xpath, True)
                     return element
                     
             except TimeoutException:
+                self._update_selector_stats('xpath', xpath, False)
                 continue
             except Exception as e:
                 logger.debug(f"XPath selector '{xpath}' failed: {e}")
+                self._update_selector_stats('xpath', xpath, False)
                 continue
                 
         return None
     
     def _try_css_selectors(self, css_selectors: List[str], timeout: int,
-                          wait_for_clickable: bool = False) -> Optional[WebElement]:
-        """Try all CSS selectors in order"""
-        for css in css_selectors:
+                          wait_for_clickable: bool = False, first_match_only: bool = True) -> Optional[WebElement]:
+        """
+        Try all CSS selectors in order with optimization for first match
+        
+        Args:
+            css_selectors: List of CSS selectors to try
+            timeout: Total timeout for all selectors
+            wait_for_clickable: Wait for element to be clickable instead of just present
+            first_match_only: Exit immediately on first successful match
+            
+        Returns:
+            WebElement if found, None otherwise
+        """
+        if first_match_only and self._successful_selectors.get('css'):
+            # Try the previously successful selector first
+            successful_css = self._successful_selectors['css']
+            if successful_css in css_selectors:
+                css_selectors = [successful_css] + [c for c in css_selectors if c != successful_css]
+        
+        for i, css in enumerate(css_selectors):
+            # Calculate timeout per selector based on position and strategy
+            if first_match_only:
+                # Give more time to first few selectors
+                selector_timeout = max(1, timeout // (i + 1))
+            else:
+                selector_timeout = timeout // len(css_selectors)
+                
             try:
                 if wait_for_clickable:
-                    element = WebDriverWait(self.driver, timeout//len(css_selectors)).until(
+                    element = WebDriverWait(self.driver, selector_timeout).until(
                         EC.element_to_be_clickable((By.CSS_SELECTOR, css))
                     )
                 else:
-                    element = WebDriverWait(self.driver, timeout//len(css_selectors)).until(
+                    element = WebDriverWait(self.driver, selector_timeout).until(
                         EC.presence_of_element_located((By.CSS_SELECTOR, css))
                     )
                 
                 if element and element.is_displayed():
+                    # Cache successful selector for future optimization
+                    self._successful_selectors['css'] = css
+                    self._update_selector_stats('css', css, True)
                     return element
                     
             except TimeoutException:
+                self._update_selector_stats('css', css, False)
                 continue
             except Exception as e:
                 logger.debug(f"CSS selector '{css}' failed: {e}")
+                self._update_selector_stats('css', css, False)
                 continue
                 
         return None
@@ -443,23 +515,25 @@ class ElementDetector:
                 
                 # Extract sell price
                 sell_element = self.find_element_from_selector(
-                    selectors.TRADING_SELL_PRICE, timeout=1
+                    selectors.INSTRUMENT_SELL_PRICE, timeout=1
                 )
                 if sell_element:
                     sell_price = self._parse_price_from_text(
                         self.extract_text_safe(sell_element)
                     )
-                    price_data['sell_price'] = sell_price
+                    if sell_price is not None:
+                        price_data['sell_price'] = sell_price
                 
                 # Extract buy price
                 buy_element = self.find_element_from_selector(
-                    selectors.TRADING_BUY_PRICE, timeout=1
+                    selectors.INSTRUMENT_BUY_PRICE, timeout=1
                 )
                 if buy_element:
                     buy_price = self._parse_price_from_text(
                         self.extract_text_safe(buy_element)
                     )
-                    price_data['buy_price'] = buy_price
+                    if buy_price is not None:
+                        price_data['buy_price'] = buy_price
                 
             except Exception as e:
                 logger.debug(f"Failed to extract trade tab prices: {e}")
@@ -477,7 +551,8 @@ class ElementDetector:
                     change_5min = self._parse_percentage_from_text(
                         self.extract_text_safe(change_5min_element)
                     )
-                    price_data['change_5min'] = change_5min
+                    if change_5min is not None:
+                        price_data['change_5min'] = change_5min
                 
                 # Extract 1hour change
                 change_1hour_element = self.find_element_from_selector(
@@ -487,7 +562,8 @@ class ElementDetector:
                     change_1hour = self._parse_percentage_from_text(
                         self.extract_text_safe(change_1hour_element)
                     )
-                    price_data['change_1hour'] = change_1hour
+                    if change_1hour is not None:
+                        price_data['change_1hour'] = change_1hour
                 
                 # Extract 1day change
                 change_1day_element = self.find_element_from_selector(
@@ -497,7 +573,8 @@ class ElementDetector:
                     change_1day = self._parse_percentage_from_text(
                         self.extract_text_safe(change_1day_element)
                     )
-                    price_data['change_1day'] = change_1day
+                    if change_1day is not None:
+                        price_data['change_1day'] = change_1day
                 
             except Exception as e:
                 logger.debug(f"Failed to extract info tab data: {e}")

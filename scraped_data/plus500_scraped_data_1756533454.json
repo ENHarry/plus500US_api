@@ -1,0 +1,14 @@
+{
+  "extraction_timestamp": "2025-08-30T01:57:34.489977",
+  "platform_url": "https://app.plus500.com/?mode=demo",
+  "market_data": {
+    "timestamp": "2025-08-30T01:57:30.436170",
+    "instruments": [],
+    "extraction_method": "web_scraping"
+  },
+  "account_data": {
+    "timestamp": "2025-08-30T01:57:34.191001",
+    "extraction_method": "web_scraping"
+  },
+  "page_title": "Plus500 WebTrader | Leading CFD Platform | Online Trading"
+}

@@ -1,20 +1,36 @@
-from .config import Config, load_config
-from .session import SessionManager
-from .auth import AuthClient
-from .trading import TradingClient
-from .marketdata import MarketDataClient
-from .instruments import InstrumentsClient
-from .account import AccountClient
-from .post_login import PostLoginDataService
-from .risk_management import RiskManagementService, PartialClosureValidator
-from .models import (
+from sympy import im
+from .requests.config import Config, load_config
+from .requests.session import SessionManager
+from .requests.auth import AuthClient
+from .requests.trading import TradingClient
+from .requests.marketdata import MarketDataClient
+from .requests.instruments import InstrumentsClient
+from .requests.account import AccountClient
+from .requests.post_login import PostLoginDataService
+from .requests.risk_management import RiskManagementService, PartialClosureValidator
+
+from .requests.plus500_api import Plus500ApiClient  # Pulls from all modules
+
+# Phase 1-3 Enhanced Components
+from .requests.risk_manager import AdvancedRiskManager
+from .requests.trading_utils import AdvancedTradingUtils
+from .requests.hybrid_integration import HybridAPIClient, HybridConfig, FallbackStrategy
+from .requests.security import SecureCredentialHandler, SecurityAuditor
+
+from .requests.models import (
     Instrument, Quote, OrderDraft, Order, Position, Account,
-    RiskManagementSettings, BracketOrder, PartialTakeProfitRule
+    RiskManagementSettings, BracketOrder, PartialTakeProfitRule,
+    # Phase 2 Enhanced Models
+    Plus500AccountInfo, Plus500InstrumentData, Plus500OrderRequest, Plus500OrderResponse,
+    Plus500Position, Plus500ClosedPosition, Plus500OrderInfo, Plus500ApiError,
+    Plus500FundsInfo, Plus500InstrumentPrice, Plus500ChartData, Plus500MarginCalculation,
+    Plus500OrderValidation, Plus500BuySellInfo
 )
-from .errors import (
+from .requests.errors import (
     AuthenticationError, AuthorizationError, AutomationBlockedError,
     RateLimitedError, OrderRejectError, InstrumentNotFound, ValidationError, 
-    CaptchaRequiredError, PartialTakeProfitError, RiskManagementError, PositionSizeError
+    CaptchaRequiredError, PartialTakeProfitError, RiskManagementError, PositionSizeError,
+    TradingError, APIError
 )
 
 # WebDriver modules (optional import)

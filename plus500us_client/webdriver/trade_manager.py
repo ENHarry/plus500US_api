@@ -38,6 +38,8 @@ class WebDriverTradeManager:
         # Cache for position and order tracking
         self._position_cache: Dict[str, Dict[str, Any]] = {}
         self._order_cache: Dict[str, Order] = {}
+        self._pnl_history: Dict[str, List[Decimal]] = {}  # Track P&L history per position
+        self._monitoring_active: Dict[str, bool] = {}  # Track active monitoring sessions
         
     def initialize(self, driver=None) -> None:
         """Initialize with WebDriver instance"""

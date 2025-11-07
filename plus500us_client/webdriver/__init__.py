@@ -9,6 +9,7 @@ from .instruments_discovery import WebDriverInstrumentsDiscovery
 from .pnl_analyzer import WebDriverPnLAnalyzer
 from .trade_manager import WebDriverTradeManager
 from .session_integrator import WebDriverSessionIntegrator
+from .unified_client import UnifiedWebDriverClient
 
 __all__ = [
     "BrowserManager",
@@ -21,5 +22,6 @@ __all__ = [
     "WebDriverInstrumentsDiscovery", 
     "WebDriverPnLAnalyzer",
     "WebDriverTradeManager",
-    "WebDriverSessionIntegrator"
+    "WebDriverSessionIntegrator",
+    "UnifiedWebDriverClient"
 ]

@@ -3,8 +3,8 @@ import logging
 from typing import Dict, Any, Optional, Tuple
 from enum import Enum
 
-from ..config import Config
-from ..errors import AutomationBlockedError, CaptchaRequiredError
+from ..requests.config import Config
+from ..requests.errors import AutomationBlockedError, CaptchaRequiredError
 
 logger = logging.getLogger(__name__)
 

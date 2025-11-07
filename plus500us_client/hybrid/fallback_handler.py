@@ -6,8 +6,8 @@ from functools import wraps
 from contextlib import contextmanager
 
 from .method_selector import MethodSelector, AutomationMethod
-from ..config import Config
-from ..errors import (
+from ..requests.config import Config
+from ..requests.errors import (
     AutomationBlockedError, CaptchaRequiredError, RateLimitedError,
     AuthenticationError, OrderRejectError, ValidationError
 )

@@ -18,6 +18,7 @@ try:
     import undetected_chromedriver as uc
     UNDETECTED_CHROME_AVAILABLE = True
 except ImportError:
+    uc = None
     UNDETECTED_CHROME_AVAILABLE = False
 
 try:
@@ -28,7 +29,10 @@ try:
 except ImportError:
     WEBDRIVER_MANAGER_AVAILABLE = False
 
-logger = logging.getLogger(__name__)
+from .performance_monitor import get_optimizer, get_profiler, monitor_performance, StartupOptimizer
+from ..security import secure_logger
+
+logger = secure_logger(__name__)
 
 class BrowserManager:
     """Advanced browser management with anti-detection and stealth features"""
@@ -46,6 +50,8 @@ class BrowserManager:
             self.main_config = None
             
         self.driver: Optional[webdriver.Remote] = None
+        self.service: Optional[Any] = None  # Track service for cleanup
+        self.driver_id: Optional[str] = None  # Unique ID for tracking
         self.profile_path = Path(self.config.get('profile_path', Path.home() / '.plus500_profile'))
         self.browser_type = self.config.get('browser', 'chrome').lower()
         self.headless = self.config.get('headless', False)
@@ -53,14 +59,23 @@ class BrowserManager:
         self.window_size = self.config.get('window_size', (1920, 1080))
         self.implicit_wait = self.config.get('implicit_wait', 10)
         self.page_load_timeout = self.config.get('page_load_timeout', 30)
+        self.performance_mode = self.config.get('performance_mode', False)
         
+        # Get optimizer instance
+        self.optimizer = get_optimizer()
+        
+    @monitor_performance("browser_startup")
     def start_browser(self) -> webdriver.Remote:
-        """Start browser with anti-detection features"""
+        """Start browser with anti-detection features and performance optimization"""
         if self.driver:
             logger.warning("Browser already started")
             return self.driver
             
-        logger.info(f"Starting {self.browser_type} browser (headless: {self.headless})")
+        # Apply performance optimizations if enabled
+        if self.performance_mode:
+            self._apply_performance_optimizations()
+            
+        logger.info(f"Starting {self.browser_type} browser (headless: {self.headless}, performance: {self.performance_mode})")
         
         try:
             if self.browser_type == 'chrome':
@@ -69,8 +84,16 @@ class BrowserManager:
                 self.driver = self._start_firefox()
             elif self.browser_type == 'edge':
                 self.driver = self._start_edge()
+            elif self.browser_type == 'safari':
+                self.driver = self._start_safari()
+            elif self.browser_type == 'opera':
+                self.driver = self._start_opera()
             else:
-                raise ValueError(f"Unsupported browser: {self.browser_type}. Supported: chrome, firefox, edge")
+                raise ValueError(f"Unsupported browser: {self.browser_type}. Supported: chrome, firefox, edge, safari, opera")
+                
+            # Register driver for cleanup
+            self.driver_id = f"{self.browser_type}_{int(time.time())}"
+            self.optimizer.register_driver(self.driver_id, self.driver, self.service)
                 
             # Configure driver timeouts
             self.driver.implicitly_wait(self.implicit_wait)
@@ -78,29 +101,44 @@ class BrowserManager:
             
             # Set window size
             if not self.headless:
-                self.driver.set_window_size(*self.window_size)
+                width, height = self.window_size
+                self.driver.set_window_size(width, height)
                 
             # Apply stealth modifications
             if self.stealth_mode:
                 self._apply_stealth_modifications()
+                
+            # Apply additional anti-detection measures
+            self._apply_advanced_anti_detection()
+            
+            # Warm up browser if performance mode is enabled
+            if self.performance_mode:
+                warmup_time = StartupOptimizer.warmup_browser(self.driver)
+                logger.info(f"Browser warmed up in {warmup_time:.2f}s")
                 
             logger.info("Browser started successfully")
             return self.driver
             
         except Exception as e:
             logger.error(f"Failed to start browser: {e}")
+            # Clean up on failure
+            self.cleanup()
+            raise
             raise
     
-    def stop_browser(self) -> None:
+    def stop_browser(self) -> bool:
         """Safely stop the browser"""
         if self.driver:
             try:
                 self.driver.quit()
                 logger.info("Browser stopped successfully")
+                return True
             except Exception as e:
                 logger.warning(f"Error stopping browser: {e}")
+                return False
             finally:
                 self.driver = None
+        return True
     
     def restart_browser(self) -> webdriver.Remote:
         """Restart the browser (useful for clearing state)"""
@@ -194,7 +232,7 @@ class BrowserManager:
         options.add_experimental_option("prefs", prefs)
         
         # Try undetected Chrome first if available
-        if UNDETECTED_CHROME_AVAILABLE and self.stealth_mode:
+        if UNDETECTED_CHROME_AVAILABLE and self.stealth_mode and uc:
             try:
                 logger.info("Using undetected Chrome driver")
                 driver = uc.Chrome(
@@ -207,14 +245,17 @@ class BrowserManager:
                 logger.warning(f"Undetected Chrome failed, falling back to regular Chrome: {e}")
         
         # Fallback to regular Chrome
-        service = None
         if WEBDRIVER_MANAGER_AVAILABLE:
             try:
-                service = ChromeService(ChromeDriverManager().install())
+                from webdriver_manager.chrome import ChromeDriverManager
+                self.service = ChromeService(ChromeDriverManager().install())
             except Exception as e:
                 logger.warning(f"WebDriver Manager failed: {e}")
-        
-        return webdriver.Chrome(service=service, options=options)
+                self.service = ChromeService()
+        else:
+            self.service = ChromeService()
+
+        return webdriver.Chrome(service=self.service, options=options)
     
     def _start_firefox(self) -> webdriver.Firefox:
         """Start Firefox with optimized options"""
@@ -240,14 +281,17 @@ class BrowserManager:
             for key, value in prefs.items():
                 options.set_preference(key, value)
         
-        service = None
         if WEBDRIVER_MANAGER_AVAILABLE:
             try:
-                service = FirefoxService(GeckoDriverManager().install())
+                from webdriver_manager.firefox import GeckoDriverManager
+                self.service = FirefoxService(GeckoDriverManager().install())
             except Exception as e:
                 logger.warning(f"WebDriver Manager failed: {e}")
-        
-        return webdriver.Firefox(service=service, options=options)
+                self.service = FirefoxService()
+        else:
+            self.service = FirefoxService()
+
+        return webdriver.Firefox(service=self.service, options=options)
     
     def _start_edge(self) -> webdriver.Edge:
         """Start Microsoft Edge with optimized options"""
@@ -317,11 +361,185 @@ class BrowserManager:
         service = None
         if WEBDRIVER_MANAGER_AVAILABLE:
             try:
+                from webdriver_manager.microsoft import EdgeChromiumDriverManager
                 service = EdgeService(EdgeChromiumDriverManager().install())
             except Exception as e:
                 logger.warning(f"WebDriver Manager failed: {e}")
         
-        return webdriver.Edge(service=service, options=options)
+        if service:
+            return webdriver.Edge(service=service, options=options)
+        else:
+            return webdriver.Edge(options=options)
+    
+    def _start_safari(self) -> 'webdriver.Safari':
+        """Start Safari browser (macOS only)"""
+        import platform
+        if platform.system() != 'Darwin':
+            raise ValueError("Safari is only available on macOS")
+        
+        from selenium.webdriver.safari.options import Options as SafariOptions
+        options = SafariOptions()
+        
+        # Safari has limited configuration options
+        if self.stealth_mode:
+            logger.warning("Safari has limited stealth mode support")
+        
+        # Safari doesn't use external driver
+        return webdriver.Safari(options=options)
+    
+    def _start_opera(self) -> 'webdriver.Chrome':
+        """Start Opera browser (uses Chrome driver)"""
+        from selenium.webdriver.chrome.options import Options as ChromeOptions
+        options = ChromeOptions()
+        
+        # Find Opera executable
+        import platform
+        system = platform.system()
+        if system == "Windows":
+            opera_paths = [
+                r"C:\Program Files\Opera\launcher.exe",
+                r"C:\Program Files (x86)\Opera\launcher.exe",
+                r"C:\Users\{}\AppData\Local\Programs\Opera\launcher.exe".format(os.getenv('USERNAME', ''))
+            ]
+        elif system == "Darwin":  # macOS
+            opera_paths = ["/Applications/Opera.app/Contents/MacOS/Opera"]
+        else:  # Linux
+            opera_paths = ["/usr/bin/opera", "/opt/opera/opera"]
+        
+        opera_binary = None
+        for path in opera_paths:
+            if os.path.exists(path):
+                opera_binary = path
+                break
+        
+        if not opera_binary:
+            raise ValueError("Opera browser not found. Please install Opera or use a different browser.")
+        
+        options.binary_location = opera_binary
+        
+        # Apply stealth options (similar to Chrome)
+        if self.stealth_mode:
+            stealth_args = [
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-blink-features=AutomationControlled',
+                '--disable-extensions',
+                '--disable-plugins',
+                '--disable-images' if self.config.get('disable_images', False) else '',
+            ]
+            for arg in stealth_args:
+                if arg:  # Only add non-empty args
+                    options.add_argument(arg)
+        
+        if self.headless:
+            options.add_argument('--headless=new')
+        
+        # Use Chrome driver for Opera
+        service = None
+        if WEBDRIVER_MANAGER_AVAILABLE:
+            try:
+                from webdriver_manager.chrome import ChromeDriverManager
+                service = ChromeService(ChromeDriverManager().install())
+            except Exception as e:
+                logger.warning(f"WebDriver Manager failed for Opera: {e}")
+        
+        if service:
+            return webdriver.Chrome(service=service, options=options)
+        else:
+            return webdriver.Chrome(options=options)
+    
+    def _apply_advanced_anti_detection(self) -> None:
+        """Apply advanced anti-detection measures"""
+        if not self.driver:
+            return
+        
+        try:
+            # Remove navigator.webdriver property
+            self.driver.execute_script(
+                "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+            )
+            
+            # Spoof navigator properties
+            self.driver.execute_script("""
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => [1, 2, 3, 4, 5].map(() => ({
+                        0: {type: "application/x-google-chrome-pdf", suffixes: "pdf", description: "Portable Document Format"},
+                        description: "Portable Document Format",
+                        filename: "internal-pdf-viewer",
+                        length: 1,
+                        name: "Chrome PDF Plugin"
+                    }))
+                });
+            """)
+            
+            # Spoof permissions
+            self.driver.execute_script("""
+                const originalQuery = window.navigator.permissions.query;
+                window.navigator.permissions.query = (parameters) => (
+                    parameters.name === 'notifications' ?
+                        Promise.resolve({state: Notification.permission}) :
+                        originalQuery(parameters)
+                );
+            """)
+            
+            # Mock WebGL vendor
+            self.driver.execute_script("""
+                const getParameter = WebGLRenderingContext.getParameter;
+                WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                    if (parameter === 37445) {
+                        return 'Intel Inc.';
+                    }
+                    if (parameter === 37446) {
+                        return 'Intel Iris OpenGL Engine';
+                    }
+                    return getParameter(parameter);
+                };
+            """)
+            
+            # Randomize canvas fingerprint
+            self.driver.execute_script("""
+                const toBlob = HTMLCanvasElement.prototype.toBlob;
+                const toDataURL = HTMLCanvasElement.prototype.toDataURL;
+                const getImageData = CanvasRenderingContext2D.prototype.getImageData;
+                
+                const noisify = function(canvas, context) {
+                    const shift = {
+                        'r': Math.floor(Math.random() * 10) - 5,
+                        'g': Math.floor(Math.random() * 10) - 5,
+                        'b': Math.floor(Math.random() * 10) - 5,
+                        'a': Math.floor(Math.random() * 10) - 5
+                    };
+                    const width = canvas.width, height = canvas.height;
+                    if (width && height) {
+                        const imageData = getImageData.apply(context, [0, 0, width, height]);
+                        for (let i = 0; i < height; i++) {
+                            for (let j = 0; j < width; j++) {
+                                const n = ((i * (width * 4)) + (j * 4));
+                                imageData.data[n + 0] = imageData.data[n + 0] + shift.r;
+                                imageData.data[n + 1] = imageData.data[n + 1] + shift.g;
+                                imageData.data[n + 2] = imageData.data[n + 2] + shift.b;
+                                imageData.data[n + 3] = imageData.data[n + 3] + shift.a;
+                            }
+                        }
+                        context.putImageData(imageData, 0, 0);
+                    }
+                };
+                
+                HTMLCanvasElement.prototype.toBlob = function() {
+                    noisify(this, this.getContext('2d'));
+                    return toBlob.apply(this, arguments);
+                };
+                
+                HTMLCanvasElement.prototype.toDataURL = function() {
+                    noisify(this, this.getContext('2d'));
+                    return toDataURL.apply(this, arguments);
+                };
+            """)
+            
+            logger.debug("Advanced anti-detection measures applied")
+            
+        except Exception as e:
+            logger.warning(f"Failed to apply some anti-detection measures: {e}")
     
     def _apply_stealth_modifications(self) -> None:
         """Apply JavaScript-based stealth modifications"""
@@ -519,3 +737,39 @@ class BrowserManager:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit"""
         self.stop_browser()
+    
+    def _apply_performance_optimizations(self):
+        """Apply performance optimizations to browser configuration"""
+        optimizer_config = self.optimizer.optimize_browser_config(self.browser_type)
+        
+        # Update timeouts for faster operations
+        if 'timeouts' in optimizer_config:
+            timeouts = optimizer_config['timeouts']
+            self.implicit_wait = timeouts.get('implicit', 5)
+            self.page_load_timeout = timeouts.get('page_load', 20)
+        
+        # Apply browser-specific optimizations
+        if self.browser_type == 'chrome' and 'chrome_options' in optimizer_config:
+            if 'chrome_options' not in self.config:
+                self.config['chrome_options'] = []
+            self.config['chrome_options'].extend(optimizer_config['chrome_options'])
+        
+        elif self.browser_type == 'firefox' and 'firefox_prefs' in optimizer_config:
+            if 'firefox_prefs' not in self.config:
+                self.config['firefox_prefs'] = {}
+            self.config['firefox_prefs'].update(optimizer_config['firefox_prefs'])
+        
+        logger.info("Applied performance optimizations")
+    
+    @monitor_performance("browser_cleanup")
+    def cleanup(self) -> bool:
+        """Clean up browser resources with performance monitoring"""
+        try:
+            if self.driver_id:
+                return self.optimizer.cleanup_driver(self.driver_id)
+            else:
+                # Fallback cleanup
+                return self.stop_browser()
+        except Exception as e:
+            logger.error(f"Cleanup failed: {e}")
+            return False

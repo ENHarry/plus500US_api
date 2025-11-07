@@ -1,16 +1,16 @@
 \
 from __future__ import annotations
 import argparse, sys
-from .config import load_config
-from .session import SessionManager
-from .auth import AuthClient
-from .errors import CaptchaRequiredError, ValidationError
-from .instruments import InstrumentsClient
-from .marketdata import MarketDataClient
-from .account import AccountClient
-from .trading import TradingClient
-from .risk_management import RiskManagementService
-from .models import OrderDraft
+from .requests.config import load_config
+from .requests.session import SessionManager
+from .requests.auth import AuthClient
+from .requests.errors import CaptchaRequiredError, ValidationError
+from .requests.instruments import InstrumentsClient
+from .requests.marketdata import MarketDataClient
+from .requests.account import AccountClient
+from .requests.trading import TradingClient
+from .requests.risk_management import RiskManagementService
+from .requests.models import OrderDraft
 from decimal import Decimal
 
 def main():
