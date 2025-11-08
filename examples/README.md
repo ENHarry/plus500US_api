@@ -1,146 +1,288 @@
-# Plus500US WebDriver Automation Examples
+# Plus500US SDK Examples# Plus500US SDK Examples
 
-This directory contains comprehensive examples demonstrating the WebDriver-powered automation capabilities of the Plus500US client.
 
-## 🚀 Quick Start
 
-The examples are designed to be run in order, building from basic authentication to complete trading workflows:
+This directory contains practical examples demonstrating all features of the Plus500US Python SDK.This directory contains practical examples demonstrating all features of the Plus500US Python SDK.
 
-1. **`webdriver_login.py`** - Basic WebDriver authentication
-2. **`webdriver_trading.py`** - Trading operations and risk management  
-3. **`hybrid_fallback.py`** - Intelligent fallback system
-4. **`complete_workflow.py`** - End-to-end automation workflow
 
-## 📋 Example Descriptions
 
-### 🔐 webdriver_login.py
-**WebDriver Authentication Example**
+## 🚀 Getting Started## 🚀 Quick Start
+
+
+
+Run the examples in this order to learn the SDK:The examples are designed to be run in order, building from basic authentication to complete trading workflows:
+
+
+
+1. **[webdriver_login.py](webdriver_login.py)** - Authentication basics1. **`webdriver_login.py`** - Basic WebDriver authentication
+
+2. **[webdriver_trading.py](webdriver_trading.py)** - Trading operations  2. **`webdriver_trading.py`** - Trading operations and risk management  
+
+3. **[hybrid_fallback.py](hybrid_fallback.py)** - Intelligent fallback system3. **`hybrid_fallback.py`** - Intelligent fallback system
+
+4. **[complete_workflow.py](complete_workflow.py)** - End-to-end workflow4. **`complete_workflow.py`** - End-to-end automation workflow
+
+
+
+## 📁 Example Categories## 📋 Example Descriptions
+
+
+
+### 🔐 Authentication### 🔐 webdriver_login.py
+
+- **`webdriver_login.py`** - WebDriver-based authentication**WebDriver Authentication Example**
+
+- **`interactive_login.py`** - Manual browser login with session import
 
 Demonstrates the primary authentication method using WebDriver automation:
-- Browser-based manual login with session capture
-- Cookie extraction and session management
-- Session validation and backup
+
+### 📊 Trading Operations- Browser-based manual login with session capture
+
+- **`webdriver_trading.py`** - Market/limit orders, positions, risk management- Cookie extraction and session management
+
+- **`webdriver_account_management.py`** - Account info, balance, instruments- Session validation and backup
+
 - Profile persistence for faster future logins
 
-```bash
-python examples/webdriver_login.py
+### 🤖 Advanced Features
+
+- **`hybrid_fallback.py`** - Intelligent method switching```bash
+
+- **`complete_workflow.py`** - Production-ready automation workflowpython examples/webdriver_login.py
+
 ```
 
-**Features:**
-- ✅ Handles anti-bot protection automatically
-- ✅ Supports both demo and live accounts
-- ✅ Session persistence and backup
-- ✅ Stealth mode for undetected automation
+### 🧪 Testing & Validation
 
----
+- **`complete_live_test.py`** - Live market testing (use with caution)**Features:**
+
+- ✅ Handles anti-bot protection automatically
+
+## 🎯 Quick Examples- ✅ Supports both demo and live accounts
+
+- ✅ Session persistence and backup
+
+### Simple Market Order- ✅ Stealth mode for undetected automation
+
+```python
+
+from plus500us_client import Plus500ApiClient, load_config---
+
+from decimal import Decimal
 
 ### 📈 webdriver_trading.py
-**Trading Automation Example**
 
-Comprehensive trading operations using WebDriver:
+config = load_config()**Trading Automation Example**
+
+client = Plus500ApiClient(config)
+
+client.authenticate()Comprehensive trading operations using WebDriver:
+
 - Market, limit, and stop order placement
-- Position monitoring and management
-- Risk management (stop loss/take profit)
-- **Critical**: Partial take profit validation safeguards
 
-```bash
-python examples/webdriver_trading.py
-```
+order = client.place_market_order(- Position monitoring and management
 
-**Key Safety Features:**
-- 🛡️ **Partial TP requires position > 1 contract**
-- 🛡️ **Remaining position must be ≥ 1 contract**
-- 🛡️ Order validation and error handling
-- 🛡️ Real-time P&L monitoring
+    instrument="GC", - Risk management (stop loss/take profit)
 
----
+    side="BUY", - **Critical**: Partial take profit validation safeguards
 
-### 🧠 hybrid_fallback.py
-**Intelligent Fallback System**
+    quantity=Decimal("1")
 
-Demonstrates the hybrid automation system that automatically switches between methods:
-- Intelligent method selection based on context
-- Automatic fallback when primary method fails
-- Circuit breaker protection
-- Context-aware adaptation
+)```bash
 
-```bash
+print(f"Order placed: {order['id']}")python examples/webdriver_trading.py
+
+``````
+
+
+
+### Order with Risk Management**Key Safety Features:**
+
+```python- 🛡️ **Partial TP requires position > 1 contract**
+
+order = client.place_market_order(- 🛡️ **Remaining position must be ≥ 1 contract**
+
+    instrument="GC",- 🛡️ Order validation and error handling
+
+    side="BUY", - 🛡️ Real-time P&L monitoring
+
+    quantity=Decimal("1"),
+
+    stop_loss=Decimal("2650.00"),---
+
+    take_profit=Decimal("2750.00")
+
+)### 🧠 hybrid_fallback.py
+
+```**Intelligent Fallback System**
+
+
+
+### Position MonitoringDemonstrates the hybrid automation system that automatically switches between methods:
+
+```python- Intelligent method selection based on context
+
+positions = client.get_positions()- Automatic fallback when primary method fails
+
+for pos in positions:- Circuit breaker protection
+
+    print(f"{pos['instrument']}: {pos['side']} {pos['quantity']}")- Context-aware adaptation
+
+    print(f"P&L: ${pos.get('unrealized_pnl', 'N/A')}")
+
+``````bash
+
 python examples/hybrid_fallback.py
-```
 
-**Adaptive Features:**
+## ⚙️ Configuration```
+
+
+
+Create `.env` file in project root:**Adaptive Features:**
+
 - 🤖 Detects captcha and switches to WebDriver
-- 🚫 Handles rate limiting and access blocks
-- ⚡ Circuit breaker prevents repeated failures
-- 📊 Health monitoring and diagnostics
 
----
+```bash- 🚫 Handles rate limiting and access blocks
+
+PLUS500_EMAIL=your.email@example.com- ⚡ Circuit breaker prevents repeated failures
+
+PLUS500_PASSWORD=your_secure_password- 📊 Health monitoring and diagnostics
+
+PLUS500_ACCOUNT_TYPE=demo  # or 'live'
+
+WEBDRIVER_HEADLESS=false   # true for background---
+
+```
 
 ### 🎯 complete_workflow.py
-**Complete End-to-End Workflow**
 
-Full automation workflow from authentication to trading:
+## 🛡️ Safety Features**Complete End-to-End Workflow**
+
+
+
+All examples demonstrate critical safety features:Full automation workflow from authentication to trading:
+
 - Complete authentication process
-- Session management and validation
-- Trading operations with risk management
-- Position monitoring and management
-- Error handling and recovery
+
+- **Position Validation**: Prevents invalid partial take profits- Session management and validation
+
+- **Risk Management**: Automatic stop loss and take profit- Trading operations with risk management
+
+- **Error Handling**: Comprehensive exception handling  - Position monitoring and management
+
+- **Resource Cleanup**: Proper WebDriver cleanup- Error handling and recovery
+
 - Cleanup and session backup
 
-```bash
-python examples/complete_workflow.py
-```
+## 📋 Requirements
 
-**Production Features:**
+```bash
+
+- Python 3.8+python examples/complete_workflow.py
+
+- Firefox browser (for WebDriver)```
+
+- Plus500US account (demo recommended for testing)
+
+- Environment variables configured**Production Features:**
+
 - 🚀 Complete automation pipeline
-- 🛡️ Comprehensive safety validations
+
+## 🚀 Running Examples- 🛡️ Comprehensive safety validations
+
 - 📊 System health monitoring
-- 💾 Session backup and recovery
-- 🧹 Proper resource cleanup
+
+```bash- 💾 Session backup and recovery
+
+# Basic authentication- 🧹 Proper resource cleanup
+
+python examples/webdriver_login.py
 
 ---
 
-## ⚙️ Configuration
+# Trading operations
 
-### Environment Variables
+python examples/webdriver_trading.py  ## ⚙️ Configuration
+
+
+
+# Complete workflow### Environment Variables
+
+python examples/complete_workflow.py
 
 Create a `.env` file in the project root:
 
-```env
-PLUS500US_EMAIL=your_email@example.com
+# Interactive login (manual)
+
+python examples/interactive_login.py```env
+
+```PLUS500US_EMAIL=your_email@example.com
+
 PLUS500US_PASSWORD=your_password
-PLUS500US_ACCOUNT_TYPE=demo
+
+## 🔧 TroubleshootingPLUS500US_ACCOUNT_TYPE=demo
+
 PLUS500US_TOTP_SECRET=your_totp_secret  # Optional
-```
 
-### WebDriver Configuration
+**Common Issues:**```
 
-The examples use Firefox by default. Customize in each example:
+
+
+1. **Browser doesn't open**: Install Firefox, check PATH### WebDriver Configuration
+
+2. **Authentication fails**: Verify credentials in `.env` 
+
+3. **Element not found**: Plus500 UI may have changedThe examples use Firefox by default. Customize in each example:
+
+4. **Permission denied**: Check file permissions
 
 ```python
-webdriver_config = {
-    "browser": "firefox",         # "firefox", "chrome", or "edge"
-    "headless": False,            # True for background operation
-    "stealth_mode": True,         # Anti-detection features
-    "window_size": (1920, 1080), # Browser window size
+
+**Debug Mode:**webdriver_config = {
+
+```python    "browser": "firefox",         # "firefox", "chrome", or "edge"
+
+import logging    "headless": False,            # True for background operation
+
+logging.basicConfig(level=logging.DEBUG)    "stealth_mode": True,         # Anti-detection features
+
+```    "window_size": (1920, 1080), # Browser window size
+
     "implicit_wait": 10,          # Element wait timeout
-    "page_load_timeout": 30,      # Page load timeout
+
+## 📚 Learn More    "page_load_timeout": 30,      # Page load timeout
+
     "profile_path": "~/.plus500_profile"  # Persistent profile
-}
-```
 
-## 🛡️ Critical Safety Features
+- **[Installation Guide](../docs/guides/installation.md)**}
 
-### Partial Take Profit Validation
+- **[Quick Start Guide](../docs/guides/quickstart.md)**```
 
-**Why This Matters:** Partial take profit operations can corrupt positions if not properly validated.
+- **[API Reference](../docs/api/client.md)**
 
-**Safety Safeguards Implemented:**
-1. **Position Size Check**: Position must have > 1 contract
+- **[WebDriver Guide](../docs/guides/webdriver.md)**## 🛡️ Critical Safety Features
+
+
+
+## ⚠️ Important Notes### Partial Take Profit Validation
+
+
+
+- **Always test with demo account first****Why This Matters:** Partial take profit operations can corrupt positions if not properly validated.
+
+- **Respect Plus500US Terms of Service**
+
+- **Use appropriate risk management****Safety Safeguards Implemented:**
+
+- **Never commit credentials to version control**1. **Position Size Check**: Position must have > 1 contract
+
 2. **Remaining Quantity Check**: Remaining position must be ≥ 1 contract after partial close
-3. **Quantity Validation**: Partial quantity cannot equal or exceed position size
 
-**Example:**
+---3. **Quantity Validation**: Partial quantity cannot equal or exceed position size
+
+
+
+**Ready to automate your trading? Start with `webdriver_login.py`! 🚀****Example:**
 ```python
 # ✅ SAFE: Position has 5 contracts, closing 2, leaving 3
 execute_partial_take_profit("POS_001", Decimal("2"))

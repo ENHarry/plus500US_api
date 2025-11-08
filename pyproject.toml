@@ -4,26 +4,72 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plus500us-client"
-version = "0.2.0"
-description = "Unofficial Plus500US trading client (requests.Session). Adds interactive captcha/browser handoff."
+version = "1.0.0"
+description = "Professional Python SDK for Plus500US futures trading automation with hybrid WebDriver/requests architecture, intelligent fallback, and comprehensive risk management."
 readme = "README.md"
-requires-python = ">=3.10"
-authors = [{name = "Your Name", email = "you@example.com"}]
-license = {text = "MIT"}
-dependencies = [
-  "requests>=2.31.0",
-  "pydantic>=2.5.0",
-  "tenacity>=8.2.3",
-  "python-dateutil>=2.8.2",
-  "PyYAML>=6.0.1",
-  "rich>=13.7.0",
-  "selenium>=4.15.0",
-  "webdriver-manager>=4.0.0",
-  "undetected-chromedriver>=3.5.0",
-  "beautifulsoup4>=4.12.0",
-  "lxml>=4.9.0"
+requires-python = ">=3.8"
+authors = [
+    {name = "Plus500US SDK Contributors", email = "contributors@plus500us-sdk.com"}
 ]
+license = {text = "MIT"}
+keywords = [
+    "trading", "automation", "plus500", "futures", "api", "webdriver", 
+    "selenium", "finance", "algorithmic-trading", "risk-management"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests>=2.31.0",
+    "pydantic>=2.5.0",
+    "tenacity>=8.2.3",
+    "python-dateutil>=2.8.2",
+    "PyYAML>=6.0.1",
+    "rich>=13.7.0",
+    "selenium>=4.15.0",
+    "webdriver-manager>=4.0.0",
+    "undetected-chromedriver>=3.5.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+    "python-dotenv>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/YourUsername/plus500us-client"
+Documentation = "https://github.com/YourUsername/plus500us-client/blob/main/docs/README.md"
+Repository = "https://github.com/YourUsername/plus500us-client"
+Issues = "https://github.com/YourUsername/plus500us-client/issues"
+Changelog = "https://github.com/YourUsername/plus500us-client/releases"
+
 [project.optional-dependencies]
-dev = ["pytest>=8.0.0", "responses>=0.25.0"]
+dev = [
+    "pytest>=8.0.0", 
+    "responses>=0.25.0", 
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "build>=1.0.0",
+    "twine>=4.0.0"
+]
+test = [
+    "pytest>=8.0.0", 
+    "responses>=0.25.0", 
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0"
+]
 [tool.setuptools.packages.find]
 where = ["."]

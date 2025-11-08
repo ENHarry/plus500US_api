@@ -1,0 +1,46 @@
+# Plus500US API Client - Dependencies
+# Core HTTP and API libraries
+requests>=2.31.0
+pydantic>=2.5.0
+tenacity>=8.2.3
+
+# Date and time utilities
+python-dateutil>=2.8.2
+
+# Configuration and data handling
+PyYAML>=6.0.1
+python-dotenv>=1.0.0
+
+# CLI and output formatting
+rich>=13.7.0
+
+# WebDriver automation
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+undetected-chromedriver>=3.5.0
+
+# HTML parsing and web scraping
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Mathematical computations (used in some modules)
+sympy>=1.12
+
+# Regular expressions (enhanced regex support)
+regex>=2023.10.3
+
+# Development and testing dependencies
+pytest>=8.0.0
+responses>=0.25.0
+
+# System monitoring
+psutil>=6.1.1
+
+# Cryptography for security features
+cryptography>=41.0.0
+
+# Additional dependencies found in codebase
+# Standard library imports that don't need installation:
+# - json, os, sys, time, logging, random, re, collections
+# - itertools, functools, threading, asyncio, hashlib
+# - base64, urllib, uuid, pathlib, decimal, typing
