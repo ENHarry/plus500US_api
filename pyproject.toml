@@ -4,26 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plus500us-client"
-version = "1.0.0"
-description = "Professional Python SDK for Plus500US futures trading automation with hybrid WebDriver/requests architecture, intelligent fallback, and comprehensive risk management."
+version = "2.0.0"
+description = "Unofficial Python SDK for Plus500 Futures / T4 API – WebSocket + Protobuf client with market data, account feed, and order routing."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 authors = [
-    {name = "Plus500US SDK Contributors", email = "contributors@plus500us-sdk.com"}
+    {name = "ENHarry", email = "emi.harry@outlook.com"}
 ]
 license = {text = "MIT"}
 keywords = [
-    "trading", "automation", "plus500", "futures", "api", "webdriver", 
-    "selenium", "finance", "algorithmic-trading", "risk-management"
+    "trading", "futures", "plus500", "t4", "api", "websocket",
+    "protobuf", "market-data", "order-routing", "algorithmic-trading"
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -32,44 +30,65 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
+    # T4 API – required
+    "websockets>=12.0",
+    "protobuf>=4.25.0",
+    "grpcio-tools>=1.60.0",
+    "python-dotenv>=1.0.0",
+    # Legacy requests layer – still used for existing modules
     "requests>=2.31.0",
     "pydantic>=2.5.0",
     "tenacity>=8.2.3",
     "python-dateutil>=2.8.2",
     "PyYAML>=6.0.1",
     "rich>=13.7.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ENHarry/plus500US_api"
+Repository = "https://github.com/ENHarry/plus500US_api"
+Issues = "https://github.com/ENHarry/plus500US_api/issues"
+
+[project.optional-dependencies]
+webdriver = [
     "selenium>=4.15.0",
     "webdriver-manager>=4.0.0",
     "undetected-chromedriver>=3.5.0",
     "beautifulsoup4>=4.12.0",
     "lxml>=4.9.0",
-    "python-dotenv>=1.0.0"
 ]
-
-[project.urls]
-Homepage = "https://github.com/YourUsername/plus500us-client"
-Documentation = "https://github.com/YourUsername/plus500us-client/blob/main/docs/README.md"
-Repository = "https://github.com/YourUsername/plus500us-client"
-Issues = "https://github.com/YourUsername/plus500us-client/issues"
-Changelog = "https://github.com/YourUsername/plus500us-client/releases"
-
-[project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0", 
-    "responses>=0.25.0", 
+    "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
     "pytest-mock>=3.12.0",
+    "responses>=0.25.0",
     "black>=23.0.0",
     "flake8>=6.0.0",
     "mypy>=1.5.0",
     "build>=1.0.0",
-    "twine>=4.0.0"
+    "twine>=4.0.0",
 ]
 test = [
-    "pytest>=8.0.0", 
-    "responses>=0.25.0", 
+    "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
-    "pytest-mock>=3.12.0"
+    "pytest-mock>=3.12.0",
+    "responses>=0.25.0",
 ]
+
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["plus500us_client*"]
+
+[tool.setuptools.package-data]
+"plus500us_client.t4.proto" = ["**/*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

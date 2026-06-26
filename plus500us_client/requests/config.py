@@ -20,9 +20,9 @@ result = load_dotenv(project_root / ".env")
 result = load_dotenv(".env")
 
 class Config(BaseModel):
-    base_url: str = "https://futures.plus500.com" # Use as sender and referer of trade requests
-    host_url: str = "https://api-futures.plus500.com" # For trade operations
-    trade_url: str = f"{base_url}/trade"
+    base_url: str = "https://api-futures.plus500.com" # Discovered from network capture
+    host_url: str = "https://api-futures.plus500.com" # For trade operations  
+    trade_url: str = "https://futures.plus500.com/trade" # Frontend URL for referer
     account_type: str = "demo"  # or "live"
     user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
     accept_language: str = "en-US,en;q=0.9"

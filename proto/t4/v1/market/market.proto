@@ -1,0 +1,174 @@
+syntax = "proto3";
+package t4proto.v1.market;
+
+import "google/protobuf/timestamp.proto";
+import "t4/v1/common/enums.proto";
+import "t4/v1/common/price.proto";
+
+// --- Subscription messages (client -> server) ---
+
+message MarketDepthSubscribe {
+  string exchange_id = 1;
+  string contract_id = 2;
+  string market_id = 3;
+  t4proto.v1.common.DepthBuffer buffer = 4;
+  t4proto.v1.common.DepthLevels depth_levels = 5;
+}
+
+message MarketByOrderSubscribe {
+  string exchange_id = 1;
+  string contract_id = 2;
+  string market_id = 3;
+  bool subscribe = 4;
+}
+
+// --- Reject messages (server -> client) ---
+
+message MarketDepthSubscribeReject {
+  string market_id = 1;
+  string reason = 2;
+}
+
+message MarketByOrderSubscribeReject {
+  string market_id = 1;
+  string reason = 2;
+}
+
+// --- Market metadata (server -> client) ---
+
+message LegItem {
+  string exchange_id = 1;
+  string contract_id = 2;
+  string market_id = 3;
+  t4proto.v1.common.BuySell buy_sell = 4;
+  int32 volume = 5;
+}
+
+message MarketDetails {
+  string exchange_id = 1;
+  string contract_id = 2;
+  string market_id = 3;
+  string description = 4;
+  string currency = 5;
+  int32 decimals = 6;
+  t4proto.v1.common.Price point_value = 7;
+  t4proto.v1.common.Price min_price_increment = 8;
+  t4proto.v1.common.ContractType contract_type = 9;
+  string group = 10;
+  repeated LegItem legs = 11;
+  optional google.protobuf.Timestamp expiry = 12;
+  optional bool is_tradeable = 13;
+}
+
+// --- Depth data (server -> client) ---
+
+message DepthLevel {
+  t4proto.v1.common.Price price = 1;
+  int32 volume = 2;
+  int32 orders = 3;
+  int32 implied_volume = 4;
+}
+
+message TradeData {
+  t4proto.v1.common.Price last_trade_price = 1;
+  int32 last_trade_volume = 2;
+  int32 total_volume = 3;
+  t4proto.v1.common.Price bid = 4;
+  t4proto.v1.common.Price ask = 5;
+  int32 bid_size = 6;
+  int32 ask_size = 7;
+  t4proto.v1.common.MarketMode market_mode = 8;
+}
+
+message MarketDepth {
+  string market_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  repeated DepthLevel bids = 3;
+  repeated DepthLevel asks = 4;
+  TradeData trade_data = 5;
+}
+
+message MarketDepthTrade {
+  string market_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  t4proto.v1.common.Price price = 3;
+  int32 volume = 4;
+  t4proto.v1.common.BuySell aggressor = 5;
+}
+
+// --- Market by order (server -> client) ---
+
+message MBOOrder {
+  string order_id = 1;
+  t4proto.v1.common.BuySell side = 2;
+  t4proto.v1.common.Price price = 3;
+  int32 volume = 4;
+  google.protobuf.Timestamp time = 5;
+}
+
+message MarketByOrderSnapshot {
+  string market_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  repeated MBOOrder orders = 3;
+}
+
+message MarketByOrderUpdate {
+  string market_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string order_id = 3;
+  t4proto.v1.common.BuySell side = 4;
+  t4proto.v1.common.Price price = 5;
+  int32 volume = 6;
+  bool deleted = 7;
+  google.protobuf.Timestamp time = 8;
+}
+
+message MarketByOrderTrade {
+  string market_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  t4proto.v1.common.Price price = 3;
+  int32 volume = 4;
+  string buy_order_id = 5;
+  string sell_order_id = 6;
+}
+
+// --- Snapshot messages ---
+
+message MarketSnapshotMessage {
+  oneof payload {
+    MarketDepth market_depth = 1;
+    MarketDepthTrade market_depth_trade = 2;
+    MarketHighLow market_high_low = 3;
+    MarketSettlement market_settlement = 4;
+  }
+}
+
+message MarketSnapshot {
+  string market_id = 1;
+  repeated MarketSnapshotMessage messages = 2;
+}
+
+// --- Additional market data ---
+
+message MarketHighLow {
+  string market_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  optional t4proto.v1.common.Price high = 3;
+  optional t4proto.v1.common.Price low = 4;
+  optional t4proto.v1.common.Price open = 5;
+}
+
+message MarketPriceLimits {
+  string market_id = 1;
+  optional t4proto.v1.common.Price upper_limit = 2;
+  optional t4proto.v1.common.Price lower_limit = 3;
+}
+
+message MarketSettlement {
+  string market_id = 1;
+  google.protobuf.Timestamp settlement_date = 2;
+  optional t4proto.v1.common.Price settlement_price = 3;
+  optional t4proto.v1.common.Price implied_price = 4;
+  optional int32 open_interest = 5;
+  optional t4proto.v1.common.Price vwap = 6;
+}

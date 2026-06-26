@@ -1,4 +1,3 @@
-from sympy import im
 from .requests.config import Config, load_config
 from .requests.session import SessionManager
 from .requests.auth import AuthClient
@@ -33,6 +32,29 @@ from .requests.errors import (
     TradingError, APIError
 )
 
+# T4 API (WebSocket + protobuf) – new primary interface
+from .t4 import (
+    T4Client,
+    T4Config,
+    WS_SIM_URL,
+    WS_LIVE_URL,
+    T4Error,
+    T4ConnectionError,
+    T4AuthError,
+    T4SubscriptionRejectError,
+    T4OrderError,
+    T4ValidationError,
+    T4LiveTradingNotEnabledError,
+    T4NotReadyError,
+    T4ProtobufError,
+    MarketDepthUpdate,
+    MarketDetailsInfo,
+    MarketTradeUpdate,
+    AccountState,
+    OrderResult,
+)
+T4_AVAILABLE = True
+
 # WebDriver modules (optional import)
 try:
     from .webdriver import (
@@ -60,7 +82,14 @@ __all__ = [
     "CaptchaRequiredError", "PartialTakeProfitError", "RiskManagementError", "PositionSizeError",
     
     # WebDriver availability
-    "WEBDRIVER_AVAILABLE"
+    "WEBDRIVER_AVAILABLE",
+    # T4 API
+    "T4Client", "T4Config", "WS_SIM_URL", "WS_LIVE_URL",
+    "T4Error", "T4ConnectionError", "T4AuthError", "T4SubscriptionRejectError",
+    "T4OrderError", "T4ValidationError", "T4LiveTradingNotEnabledError",
+    "T4NotReadyError", "T4ProtobufError", "T4_AVAILABLE",
+    "MarketDepthUpdate", "MarketDetailsInfo", "MarketTradeUpdate",
+    "AccountState", "OrderResult",
 ]
 
 # Add WebDriver modules to __all__ if available

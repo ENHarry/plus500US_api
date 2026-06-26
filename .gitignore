@@ -1,0 +1,79 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+plu_venv/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Distribution / packaging
+*.whl
+*.tar.gz
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# Environment secrets – NEVER commit
+.env
+.env.local
+*.local
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary / session artefacts
+screenshots/
+scraped_data/
+session_backup/
+network_capture/
+*.bak
+*.tmp
+*.orig
+*.rej
+*.swp
+
+# Plus500 session JSON dumps (contain credentials)
+plus500_session_*.json
+firefox_session_capture_*.json
+plus500_api_analysis_*.json
+discovered_endpoints_*.json
+publication_readiness_report.json
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docs build
+site/
